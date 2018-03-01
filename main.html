@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="shortcut icon" href="img/house.png">
+	<link rel="stylesheet" href="font/stylesheet.css">
+	<title>盖房子游戏</title>
+	<style>
+		#wrap{
+			width: 700px;
+			height: 500px;
+			border: 1px solid #ccc;
+			margin: 0 auto;
+			/*怪异盒模型 则边框不在500范围内*/
+			/*box-sizing: border-box;*/
+			position: relative;
+			background: url("img/back.jpg") no-repeat;
+			background-size:100% 100%;
+		}
+		ul,li{
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		ul{
+			overflow: hidden;
+			position: absolute;
+			bottom: 0;
+		}
+		li{
+			float: left;
+			width: 15px;
+			height:15px;
+			border: 1px solid black;
+			/*怪异盒模型 则边框不在10范围内*/
+			box-sizing: border-box;
+			background: #ccc;
+
+		}
+		#score{
+			color: black;
+			font:70px/110px 'stay_classy_sldtregular';
+			text-align: center;
+		}
+		#gameover{
+			color: black;
+			font-weight: bold;
+			font:70px/250px 'stay_classy_sldtregular';
+			text-align: center;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<!-- 先给固定内容再通过后台需求 用js创建相对的标签添加上来 -->
+	<div id="wrap">
+		<div id="score">0</div>
+		<div id="gameover">GAMEOVER~~!</div>
+		<!-- <ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul> -->
+	</div>
+</body>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="js/index.js"></script>
+<script>
+	var wrap =$("#wrap");
+	var score=$("#score");
+	var gameover=document.querySelector("#gameover");
+	//分数
+	var my_score=0;
+	
+	//记录第几个ul
+	var index=0;
+	//生成下一个ul的li的个数
+	var createNum=30;
+	wrap.on("click",function(){
+		//1.获得所有ul
+	   var uls=$("ul");
+	   //获得当前移动ul下标
+       var ulIndex =uls.length-1;
+       //取出相对应的ul,通过下标取出来的是标签，不是jq对象
+       var currentUL = uls[ulIndex];
+       //调用stop函数需要用到jq对象
+       $(currentUL).stop();
+       //下面这句是上面4句代码的结合
+	   //$($("ul")[$("ul").length-1]).stop();
+
+       //2.获得当前标签和前一个标签，进行比较并删除多余的li
+       //console.log(ulIndex);
+       
+       if (ulIndex>0) {
+        //console.log("大于一");
+        //console.log("createNum:"+createNum);
+        
+       	remove($(uls[ulIndex-1]),$(currentUL));
+       	//实现每次新产生的方块数等于上次ul剩余的方块数
+       	// createNum=$("currentUL").children().length;这样写是不对的
+       	createNum=$(currentUL).children().length;
+        //console.log($(currentUL).children().length);
+       }
+       //
+
+	   //添加新的ul
+       addLine(wrap,index,createNum);
+       index++;
+       my_score++;
+       //console.log(my_score);
+       score.html(my_score);
+       if (createNum==0) {
+           gameover.style.display="block";
+       }
+	});
+	
+</script>
+</html>
